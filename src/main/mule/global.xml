@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+    <apikit:config name="api-config1" api="resource::3b747eb1-7ede-422f-a9a4-e15e7d280668:proc-e-counselling:1.0.2:raml:zip:api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" >
+		<apikit:flow-mappings>
+			<apikit:flow-mapping resource="/allocateSeat" action="post" content-type="application/json" flow-ref="post:\allocateSeat:application\json:proc-e-counselling-config" />
+			<apikit:flow-mapping resource="/ping" action="get" flow-ref="get:\ping:proc-e-counselling-config" />
+		</apikit:flow-mappings>
+	</apikit:config>
+    <http:listener-config name="api_HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b6c65adc-0302-4206-807b-3ed2c7915fd3">
+        <http:listener-connection host="0.0.0.0" port="${HTTPListener.port}" protocol="HTTPS" readTimeout="${HTTPListener.readTimeOut}">
+			<tls:context >
+				<tls:key-store type="jks" path="keystore.jks" keyPassword="${secure::HTTPListener.TLS.key_store_configuration.key_store.key_password}" password="${secure::HTTPListener.TLS.key_store_configuration.key_store.password}" />
+			</tls:context>
+		</http:listener-connection>
+    </http:listener-config>
+    <configuration-properties doc:name="Configuration properties" doc:id="016248df-b4a7-4d25-8c73-b5d30848ed4c" file="property\proc-e-counselling-${env}.yaml" />
+    <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="b2892ccc-c7e0-4f54-976c-0ef33fba37be" key="${key.property}" file="property\proc-e-counselling-${env}.yaml" />
+    <http:request-config name="HTTPRequest-sys-e-counselling" doc:name="HTTP Request configuration" doc:id="bdebcde6-acd4-43dc-bc97-33eba512415a">
+        <http:request-connection host="${HTTPRequestor.host}" protocol="HTTPS" connectionIdleTimeout="${HTTPRequestor.connection-idle-timeout}" responseBufferSize="${HTTPRequestor.response-buffer-size}"/>
+    </http:request-config>
+	<configuration doc:name="globalError_Handler" doc:id="dc2e55bc-ff53-4c3d-ad21-b341d2982f04" defaultErrorHandler-ref="globalError_Handler" />
+	<api-gateway:autodiscovery apiId="${APIInstance.apiId}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="58bf0566-9659-48ac-8ef3-090165be258e" flowRef="api-main" />
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="1fa0b79a-c69f-48b8-ac01-ccec66d751fe" >
+		<email:smtp-connection host="${mail.host}" port="${mail.port}" user="${secure::mail.user}" password="${secure::mail.password}" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+</mule>
