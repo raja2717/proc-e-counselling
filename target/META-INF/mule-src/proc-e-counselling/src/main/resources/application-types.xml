@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="getPerformanceDetailsJSONInputMETADATA" format="java">
+      <types:shape format="raml"><![CDATA[#%RAML 1.0 DataType
+type: string]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#417b86d6-e419-48e6-b7ad-62f9649c44ec"/>
+  <types:enrichment select="#dd9096b4-de98-4d2e-89db-5b2950132dfd"/>
+  <types:enrichment select="#c5998d7f-8e2d-4d4e-9426-bf3d0f09f3ea"/>
+</types:mule>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+    <flow name="api-main">
+        <http:listener config-ref="api_HTTP_Listener_config" path="/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[attributes.statusCode default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <logger level="INFO" doc:name="Log InitialPayload" doc:id="5cfc4bea-7de0-45b9-bf32-6b52fd73c8bc" message="#[payload]"/>
+		<ee:transform doc:name="initialPayload and apiStartTime" doc:id="417b86d6-e419-48e6-b7ad-62f9649c44ec" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="initialPayload" ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+				<ee:set-variable variableName="apiStartTime" ><![CDATA[%dw 2.0
+output application/dw
+---
+now()
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<apikit:router config-ref="api-config1" />
+    </flow>
+    <flow name="post:\allocateSeat:application\json:proc-e-counselling-config">
+		<flow-ref doc:name="statusCheck-Sub_Flow-Invoke" doc:id="8374e93f-aa5a-41a7-b9fe-24121005b9a2" name="statusCheck-Sub_Flow"/>
+		<logger level="INFO" doc:name="Log FinalPayload Response" doc:id="bfa0bb31-63ac-4103-ae78-7c5fdd32ff64" message="#[payload]"/>
+    </flow>
+	<flow name="get:\ping:proc-e-counselling-config" doc:id="b890bf1d-68dc-4e11-9ac0-caae4393b6f5" >
+		<flow-ref doc:name="healthCheckSub_Flow-Invoke" doc:id="45e68873-94f5-429b-93bb-2494c9887ca4" name="healthCheckSub_Flow" />
+	</flow>
+</mule>
