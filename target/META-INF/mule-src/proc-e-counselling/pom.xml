@@ -84,13 +84,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>3b747eb1-7ede-422f-a9a4-e15e7d280668</groupId>
-			<artifactId>proc-e-counselling</artifactId>
-			<version>1.0.2</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-vm-connector</artifactId>
 			<version>2.0.0</version>
@@ -101,6 +94,13 @@
 			<artifactId>mule-email-connector</artifactId>
 			<version>1.7.0</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>3b747eb1-7ede-422f-a9a4-e15e7d280668</groupId>
+			<artifactId>proc-e-counselling</artifactId>
+			<version>1.0.3</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
 		</dependency>
 	</dependencies>
 

@@ -101,6 +101,7 @@ output application/json
 						<choice doc:name="Choice To check category Seat and General Seats availability" doc:id="71451622-c7ba-4aaf-95f0-ec0ab3251c11">
 							<when expression="#[(vars.collegeSeatData.categorySeats default 0)&gt; 0]">
 						<set-variable value="#[vars.fetchedPerformanceDetails.studentDetails.personalDetails.category]" doc:name="seatAllotedCategory" doc:id="d5a96d32-ca56-41ea-91ef-1d83a7c8f91f" variableName="seatAllotedCategory"/>
+						<set-variable value="#[now() as Number]" doc:name="allotmentId generator" doc:id="afc0de57-b735-4697-9e5e-2238122021e2" variableName="allotmentId"/>
 						<async doc:name="Async" doc:id="af9fbce1-4271-48fa-97ec-c4a27abb4e68" >
 							<flow-ref doc:name="updateCollegeSeat-Sub_Flow" doc:id="a5ff0c4c-d569-4ed1-8c1a-cc19ca587449" name="updateCollegeSeat-Sub_Flow" />
 						</async>
@@ -120,6 +121,7 @@ output application/json
 </when>
 							<when expression="#[(vars.collegeSeatData.generalSeats default 0) &gt; 0]">
 						<set-variable value="General" doc:name="seatAllotedCategory" doc:id="52f9b47b-f4ed-4add-b6fe-5280ddb30ac8" variableName="seatAllotedCategory" />
+						<set-variable value="#[now() as Number]" doc:name="allotmentId generator" doc:id="0e0def0a-1b50-4ca9-b5b6-2d0904609a50" variableName="allotmentId" />
 						<async doc:name="Async" doc:id="d05f12c4-4027-4c1b-bc25-aad41e3176be" >
 							<flow-ref doc:name="updateCollegeSeat-Sub_Flow" doc:id="8ec16c02-170e-4378-8d51-6a3887c9cf25" name="updateCollegeSeat-Sub_Flow" />
 						</async>
@@ -129,18 +131,11 @@ output application/json
 						<async doc:name="Async" doc:id="b783d4d0-066f-4f9b-91d4-037c3d7ea0cd">
 							<flow-ref doc:name="confirmationMailSending-Sub_Flow-Invoke" doc:id="0883ef6f-386c-427b-ab8b-4c5bdcdb3ae4" name="confirmationMailSending-Sub_Flow" />
 						</async>
-						<ee:transform doc:name="success Response" doc:id="42a58642-604b-46dc-9fe5-0be348a3754a">
-									<ee:message>
-										<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-	msg:"congratulation college successfully alloted to you",
-	collegeDetailPayload: vars.collegeDetailPayload ++ {seatAllotedCategory: vars.seatAllotedCategory}
-	
-}]]></ee:set-payload>
-									</ee:message>
-								</ee:transform>
+						<ee:transform doc:name="success Response" doc:id="fbb6f713-fe1f-4d0d-929c-32025e70f3e1" >
+							<ee:message >
+								<ee:set-payload resource="dwls/success-Response.dwl" />
+							</ee:message>
+						</ee:transform>
 							
 </when>
 							<otherwise>
@@ -168,6 +163,7 @@ output application/json
 						<choice doc:name="General category Seat Allocation" doc:id="c5233b8a-4351-4342-8246-b8815db5bd18">
 							<when expression="#[(vars.collegeSeatData.generalSeats default 0) &gt; 0]">
 								<set-variable value="General" doc:name="seatAllotedCategory" doc:id="36ca555f-6c39-458f-9d58-5a3f626c7f79" variableName="seatAllotedCategory" />
+						<set-variable value="#[now() as Number]" doc:name="allotmentId generator" doc:id="cab7625e-d43f-4cdd-9752-913e3d832c51" variableName="allotmentId" />
 						<async doc:name="Async" doc:id="563d3c5b-bd9b-4179-96cf-978204235b11" >
 							<flow-ref doc:name="updateCollegeSeat-Sub_Flow" doc:id="067404ff-5ce6-4ad0-8b4f-f46724a20a4a" name="updateCollegeSeat-Sub_Flow" />
 						</async>
@@ -300,15 +296,7 @@ output application/json
 	<sub-flow name="updateStudentDetails-Sub_Flow" doc:id="367834f8-e4e8-426b-94d7-9c7ac8236bf2" >
 		<ee:transform doc:name="payload to Invoke sys-e-counselling_getPerformanceDetails-put" doc:id="6e5855e5-085a-4d86-a4be-f89d8ae5b8ec" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-   "registerationId": vars.initialPayload.studentDetails.registerationId,
-   "status": "ALLOTED",
-   "date": now() as String {format: "YYYY/MM/dd"},
-   "collegeDetailPayload": vars.collegeDetailPayload ++ {seatAllotedCategory: vars.seatAllotedCategory}
-}]]></ee:set-payload>
+				<ee:set-payload resource="dwls/updateStudentDetails_payload.dwl" />
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logging before getPerformanceDetails-put-Invoke" doc:id="2fc374bc-60ed-43e3-b8f6-4c6c73980ae1" message="#[payload]"/>
@@ -333,5 +321,18 @@ output application/json
 				<email:content><![CDATA[#[vars.emailBody]]]></email:content>
 			</email:body>
 		</email:send>
+	</sub-flow>
+	<sub-flow name="getCollegeList-Sub_Flow" doc:id="c8001efe-79e2-401d-b09b-68ce3a3558c1" >
+		<flow-ref doc:name="getPerformanceDetails-Sub_Flow-Invoke" doc:id="4dedcbff-fd6b-4a90-89b4-88030b39c5f4" name="getPerformanceDetails-Sub_Flow"/>
+		<logger level="INFO" doc:name="Log before getCollegeList-get Invoke" doc:id="f0b65381-a59f-40ee-8531-5bc6d2554e25" message="#[payload]"/>
+		<http:request method="GET" doc:name="Request-sys-e-counselling-getPerformanceDetails-put-Invoke" doc:id="108f5a19-91ac-402a-993d-d61813c2a061" config-ref="HTTPRequest-sys-e-counselling" path="/getCollegeList" >
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "${secure::HTTPRequestor.client_secret}",
+	"client_id" : "${secure::HTTPRequestor.client_id}"
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Log after getCollegeList-get Invoke" doc:id="5aa7bd55-0548-4fbe-90f0-efb9c91646c8" message="#[payload]"/>
 	</sub-flow>
 </mule>
