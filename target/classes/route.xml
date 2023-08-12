@@ -10,7 +10,7 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <logger level="INFO" doc:name="Log InitialPayload" doc:id="5cfc4bea-7de0-45b9-bf32-6b52fd73c8bc" message="#[payload]" />
+        <logger level="INFO" doc:name="Log InitialPayload" doc:id="5cfc4bea-7de0-45b9-bf32-6b52fd73c8bc" message="#[attributes]"/>
         <ee:transform doc:name="initialPayload and apiStartTime" doc:id="417b86d6-e419-48e6-b7ad-62f9649c44ec">
             <ee:message />
             <ee:variables>

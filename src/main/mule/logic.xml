@@ -43,9 +43,12 @@ vars.fetchedPerformanceDetails.studentDetails.collegeAllotment]]></ee:set-payloa
 				<ee:transform doc:name="Response showing seat has been confirmed" doc:id="6fd415a6-ee7d-46c3-a2ba-5408d1a8fba0" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-output application/dw
+output application/json
 ---
-"welcome onboard! your seat has been confirmed in the alloted college. Thank you!"]]></ee:set-payload>
+{
+	"msg" : "welcome onboard! your seat has been confirmed in the alloted college. Thank you!"
+}
+]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 			</otherwise>
@@ -323,9 +326,8 @@ output application/json
 		</email:send>
 	</sub-flow>
 	<sub-flow name="getCollegeList-Sub_Flow" doc:id="c8001efe-79e2-401d-b09b-68ce3a3558c1" >
-		<flow-ref doc:name="getPerformanceDetails-Sub_Flow-Invoke" doc:id="4dedcbff-fd6b-4a90-89b4-88030b39c5f4" name="getPerformanceDetails-Sub_Flow"/>
 		<logger level="INFO" doc:name="Log before getCollegeList-get Invoke" doc:id="f0b65381-a59f-40ee-8531-5bc6d2554e25" message="#[payload]"/>
-		<http:request method="GET" doc:name="Request-sys-e-counselling-getPerformanceDetails-put-Invoke" doc:id="108f5a19-91ac-402a-993d-d61813c2a061" config-ref="HTTPRequest-sys-e-counselling" path="/getCollegeList" >
+		<http:request method="GET" doc:name="Request-sys-e-counselling-getCollegeList-get-Invoke" doc:id="108f5a19-91ac-402a-993d-d61813c2a061" config-ref="HTTPRequest-sys-e-counselling" path="/getCollegeList" >
 			<http:headers ><![CDATA[#[output application/java
 ---
 {

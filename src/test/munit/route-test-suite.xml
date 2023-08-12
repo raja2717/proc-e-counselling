@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="route-test-suite.xml" >
+		<munit:parameterizations >
+			<munit:parameterization name="runtimeArgument" >
+				<munit:parameters >
+					<munit:parameter propertyName="env" value="Local" />
+					<munit:parameter propertyName="key.property" value="mulesoft12345678" />
+				</munit:parameters>
+			</munit:parameterization>
+		</munit:parameterizations>
+	</munit:config>
+	<munit:test
+		name="route-test-suite-get:\getCollegeList:proc-e-counselling-configTest"
+		doc:id="60b01751-7a5a-4b2b-8ea4-d839eb65827c" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when"
+				doc:id="af9884e9-3f9d-41bb-a8b4-92796158566d"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeList-get-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="108f5a19-91ac-402a-993d-d61813c2a061"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getCollegeList" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeList-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output appication/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref
+				doc:name="Flow-ref to get:\getCollegeList:proc-e-counselling-config"
+				doc:id="109a8657-bf72-4bf8-90d0-602248f70576"
+				name="get:\getCollegeList:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert Payload"
+				doc:id="0956fcfb-a9b4-4463-ba39-3f844dd245b1" />
+			<munit-tools:assert-that
+				doc:name="Assert statusCode 200"
+				doc:id="ef3592d6-ef90-4e49-bb63-8642d117fd69"
+				is="#[MunitTools::notNullValue()]"
+				expression="#[attributes.statusCode == 200]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test
+		name="route-test-suite-get:\ping:proc-e-counselling-configTest"
+		doc:id="d0cfc027-7026-4492-8508-45456f45da6d" description="Test">
+		<munit:execution>
+			<flow-ref
+				doc:name="Flow-ref to get:\ping:proc-e-counselling-config"
+				doc:id="8550897d-b70a-4e5a-80d2-1b8fc32cd260"
+				name="get:\ping:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that
+				doc:name="Assert statusCode 200"
+				doc:id="ae999f2c-55ca-4cbf-bff1-28ce0a25d9f7"
+				is="#[MunitTools::notNullValue()]"
+				expression="#[payload.statusCode == 200]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test
+		name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-configTest-preference1"
+		doc:id="eb9b9aa1-0f5c-4dee-a487-6bcbae0ba1f8" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock getPerformanceDetails"
+				doc:id="7fcb7dc4-fcea-40d0-af18-6aeb3d568ae5"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_statusPending-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when getCollegeCutOff"
+				doc:id="b588029e-85c9-4179-bf6b-b5eab000f055"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when getCollegeSeat-post"
+				doc:id="1006dfd2-e091-4796-89bf-c9b96c781586"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeSeat-post-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="7ff47554-139f-428a-ac57-6ba3d3e6b450"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getCollegeSeat" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-post-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when updateCollegeSeat"
+				doc:id="9c732f39-128e-4c69-a774-ff8d5ef89332"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeSeat-put-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="a10c059e-3ed1-4853-86b9-5beb6e9507b2"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when updateStudentPerformanceDetails"
+				doc:id="089c8fe1-5249-4a87-b13b-bea510e2dcd7"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getPerformanceDetails-put-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="16db1699-24ad-4c0c-a12d-fb02f49c4e9f"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when sendingMail"
+				doc:id="86b4e0c6-571b-425c-a7ab-a4dc3b626eec" processor="email:send">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="9e8e21d0-7f2f-4d91-8527-53496148cc74"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="Email_SMTP" attributeName="config-ref" />
+					<munit-tools:with-attribute
+						whereValue="confirmation-mail sending" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="Set initialPayload"
+				doc:id="358da01c-4e67-4eae-a5fd-71d89daaec13">
+				<munit:payload
+					value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]"
+					encoding="UTF-8" mediaType="application/json" />
+				<munit:variables>
+					<munit:variable key="initialPayload"
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]"
+						encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref
+				doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config"
+				doc:id="ff25b154-ac77-4f8b-b382-8bb92c11ee0c"
+				name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression"
+				doc:id="0af59eb5-5a8b-48ca-8907-812cbfa8bc17" />
+		</munit:validation>
+	</munit:test>
+	<munit:test
+		name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-configTest-preference2"
+		doc:id="90a580ef-383d-44b0-a05f-b77cbe68ba08" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock getPerformanceDetails"
+				doc:id="7b512247-a243-498d-b42b-1f68c7d9de5f"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_ForPreference2-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when getCollegeCutOff"
+				doc:id="d980c35e-fc4a-47c0-9838-7ca75965e404"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when getCollegeSeat-post"
+				doc:id="f15c5082-1013-4f9c-889a-4c3b23a5e10a"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeSeat-post-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="7ff47554-139f-428a-ac57-6ba3d3e6b450"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getCollegeSeat" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-preference2-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when updateCollegeSeat"
+				doc:id="0244a627-5f4d-4bb8-9b47-95774c007d80"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeSeat-put-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="a10c059e-3ed1-4853-86b9-5beb6e9507b2"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when updateStudentPerformanceDetails"
+				doc:id="1e886b9e-4a58-4a41-8979-e286aec8997d"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getPerformanceDetails-put-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="16db1699-24ad-4c0c-a12d-fb02f49c4e9f"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when sendingMail"
+				doc:id="1b9a4b4d-37fc-43dc-a31c-19ea45d45036" processor="email:send">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="9e8e21d0-7f2f-4d91-8527-53496148cc74"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="Email_SMTP" attributeName="config-ref" />
+					<munit-tools:with-attribute
+						whereValue="confirmation-mail sending" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="Set initialPayload"
+				doc:id="e6cbd6b2-b6c0-42ea-8220-bc3f1c648b89">
+				<munit:payload
+					value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]"
+					encoding="UTF-8" mediaType="application/json" />
+				<munit:variables>
+					<munit:variable key="initialPayload"
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]"
+						encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref
+				doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config"
+				doc:id="ec279acc-7b06-4078-b8d6-6ddcb565a212"
+				name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression"
+				doc:id="49e5b596-8ed6-464b-8668-e8794848dd9f" />
+		</munit:validation>
+	</munit:test>
+	<munit:test
+		name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-configTest-preference3"
+		doc:id="75aabf70-77d7-4c17-99a1-d1f68c7e9310" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock getPerformanceDetails"
+				doc:id="a576abca-9784-4610-8622-7814b38149f7"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_ForPreference3-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when getCollegeCutOff"
+				doc:id="42f37291-f8bc-43a2-8f47-8c3855cf7542"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when getCollegeSeat-post"
+				doc:id="be991646-ee8a-4a31-9319-698ca5499ee1"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeSeat-post-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="7ff47554-139f-428a-ac57-6ba3d3e6b450"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getCollegeSeat" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-preference3-mockResponse.dwl')]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when updateCollegeSeat"
+				doc:id="db38b480-caa1-4060-b95a-a385da2974d3"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getCollegeSeat-put-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="a10c059e-3ed1-4853-86b9-5beb6e9507b2"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when updateStudentPerformanceDetails"
+				doc:id="ec0bcbd7-5449-490b-b6b8-1e8045e3e696"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getPerformanceDetails-put-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="16db1699-24ad-4c0c-a12d-fb02f49c4e9f"
+						attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when
+				doc:name="Mock when sendingMail"
+				doc:id="5e096d27-e7ce-4fc4-849c-2b1a95a2ea0b" processor="email:send">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="9e8e21d0-7f2f-4d91-8527-53496148cc74"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="Email_SMTP" attributeName="config-ref" />
+					<munit-tools:with-attribute
+						whereValue="confirmation-mail sending" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value='#[output application/json --- {msg: "success"}]'
+						mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes
+						value="#[output application/json --- {statusCode: 200}]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<munit:set-event doc:name="Set initialPayload"
+				doc:id="8f525138-a75d-49d4-8e92-35e78b9bc01e">
+				<munit:payload
+					value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]"
+					encoding="UTF-8" mediaType="application/json" />
+				<munit:variables>
+					<munit:variable key="initialPayload"
+						value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]"
+						encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref
+				doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config"
+				doc:id="3cbaadd9-5d80-4f4b-9c4d-5a57d11cd3ab"
+				name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression"
+				doc:id="842e1593-4fd9-48b6-b377-c6021e85dba9" />
+		</munit:validation>
+	</munit:test>
+	<munit:test
+		name="logic-test-suite-statusCheck-Sub_FlowTest-statusAlloted"
+		doc:id="c163251c-e705-4e79-9093-09bf757eb7c4" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock getPerformanceDetails FlowRef"
+				doc:id="f9af5a0c-d7ae-49b0-a470-09b22d1c8467" processor="flow-ref">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue='getPerformanceDetails-Sub_Flow-Invoke with target "fetchedPerformanceDetails"'
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="c8d5a752-a180-4e1a-b9ef-25b98c791c3d"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="getPerformanceDetails-Sub_Flow" attributeName="name" />
+					<munit-tools:with-attribute
+						whereValue="fetchedPerformanceDetails" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:variables>
+						<munit-tools:variable
+							key="fetchedPerformanceDetails"
+							value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest/fetchedPerformanceDetailsVar-status-Alloted-mockResponse.dwl')]"
+							mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow-ref to statusCheck-Sub_Flow"
+				doc:id="363e001e-c6f1-4a33-93e7-b55c106808bb"
+				name="statusCheck-Sub_Flow" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression"
+				doc:id="66c8301e-6fb3-44de-add0-3c136b257d37" />
+		</munit:validation>
+	</munit:test>
+	<munit:test
+		name="logic-test-suite-statusCheck-Sub_FlowTest-statusConfirmed"
+		doc:id="09227fb9-c439-481e-8634-c1cf38f2aa0b" description="Test">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock getPerformanceDetails FlowRef"
+				doc:id="f87b27b3-91c2-42a7-b6b8-f4e809b6c6f3" processor="flow-ref">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue='getPerformanceDetails-Sub_Flow-Invoke with target "fetchedPerformanceDetails"'
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="c8d5a752-a180-4e1a-b9ef-25b98c791c3d"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="getPerformanceDetails-Sub_Flow" attributeName="name" />
+					<munit-tools:with-attribute
+						whereValue="fetchedPerformanceDetails" attributeName="target" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:variables>
+						<munit-tools:variable
+							key="fetchedPerformanceDetails"
+							value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest/fetchedPerformanceDetailsVar-status-Confrimed-mockResponse.dwl')]"
+							mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow-ref to statusCheck-Sub_Flow"
+				doc:id="c996d035-83df-4915-b384-0c0ea9b222ea"
+				name="statusCheck-Sub_Flow" />
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert doc:name="Assert expression"
+				doc:id="2ceb59e3-016c-4419-bfe4-4754a3803ab4">
+				<munit-tools:that><![CDATA[#[%dw 2.0
+import procecounsellingFlowTest::assert_expression_payload_status_confirmed
+---
+assert_expression_payload_status_confirmed::main({payload: payload})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test
+		name="logic-test-suite-getPerformanceDetails-Sub_FlowTest-error"
+		doc:id="98261fac-8995-440a-b5c0-3c589508b8be" description="Test"
+		expectedErrorType="APP:CUSTOM_ERROR"
+		expectedErrorDescription="The 'registerationId' is not valid , please check the RegisterationId and try again">
+		<munit:behavior>
+			<munit-tools:mock-when
+				doc:name="Mock getPerformanceDetails"
+				doc:id="cd77ae5a-bbd8-4853-930f-5cf053178fe1"
+				processor="http:request">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute
+						whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke"
+						attributeName="doc:name" />
+					<munit-tools:with-attribute
+						whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d"
+						attributeName="doc:id" />
+					<munit-tools:with-attribute
+						whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload
+						value="#[output application/json  --- []]"
+						mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref
+				doc:name="Flow-ref to getPerformanceDetails-Sub_Flow"
+				doc:id="bc8cd8d8-8954-46e3-a7db-80a0eb9095b8"
+				name="getPerformanceDetails-Sub_Flow" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="logic-test-suite-getCollegeCutoff-Sub_FlowTest-errorTesting" doc:id="87674bf9-d964-438a-986f-48832bb0e117" description="Test" expectedErrorType="APP:CUSTOM_ERROR" expectedErrorDescription="One or more collegeId doen't exist , Please check the collegeId in your preference and try again.">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when getCollegeCutOff" doc:id="8ec6d54e-e230-4624-a1d2-9635adfd0e7d" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- []]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getCollegeCutoff-Sub_Flow" doc:id="7e8908bc-d6fa-441b-95de-98328d92d537" name="getCollegeCutoff-Sub_Flow" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="route-test-suite-get:\getCollegeList:proc-e-counselling-HTTPTimeout-Error" doc:id="c2ca6fde-0095-4f74-9b13-9102c9f86256" description="Test" expectedErrorType="HTTP:TIMEOUT">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getCollegeList" doc:id="7a3ecde2-4505-4299-98bd-15e035643fb8" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeList-get-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="108f5a19-91ac-402a-993d-d61813c2a061" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeList" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:TIMEOUT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\getCollegeList:proc-e-counselling-config" doc:id="0a473576-e620-4c81-929f-9ca6cd5ec12e" name="get:\getCollegeList:proc-e-counselling-config" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="route-test-suite-api-mainTest-error-APIKIT:NOT_FOUND" doc:id="10f402fd-34dd-400e-b249-c66cda4de028" description="Test" expectedErrorType="APIKIT:NOT_FOUND">
+		<munit:behavior>
+			<munit:set-event doc:name="Set Event" doc:id="6196b545-b8d3-434f-be87-4d98526797cf" >
+				<munit:payload value='#[output application/json &#10;---&#10;{&#10;	"msg":"APIKIT_NOT_FOUND"&#10;}]' encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://procecounsellingFlowTest\set-event-attributesAPIKIT_NOT_FOUND.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to api-main" doc:id="e455c1e1-9b74-429a-a2f0-0bae8d99f45f" name="api-main"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="route-test-suite-api-mainTest-error-APIKIT:METHOD_NOT_ALLOWED" doc:id="78446068-e515-4f7f-9a98-0d0ed57a14c1" description="Test" expectedErrorType="APIKIT:METHOD_NOT_ALLOWED" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="ef3429c2-34bc-4335-94dc-9d192880676d" >
+				<munit:attributes value="#[readUrl('classpath://procecounsellingFlowTest\set-event-attributesAPIKIT_METHOD_NOT_ALLOWED.dwl')]" />
+				</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to api-main" doc:id="7f46d7a1-9b7c-478d-89c3-d6b42a322e75" name="api-main" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="route-test-suite-api-mainTest-error-APIKIT:UNSUPPORTED_MEDIA_TYPE" doc:id="6b4581a4-1c5c-4f2a-88d0-7d03dbbe4321" description="Test" expectedErrorType="APIKIT:UNSUPPORTED_MEDIA_TYPE" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="34909a13-02a8-4d05-8136-ff933c89c69a" >
+				<munit:attributes value="#[readUrl('classpath://procecounsellingFlowTest\set-event-attributesAPIKIT_UNSUPPORTED_MEDIA_TYPE.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to api-main" doc:id="68b1ca49-ad06-474f-a7a7-88b7b9eeced1" name="api-main" />
+		</munit:execution>
+	</munit:test>
+	<munit:test name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-configTest-APP:CUSTOM_ERROR" doc:id="0ce412f8-ef73-46bb-8c13-fe8e7b8d4d23" description="Test" expectedErrorType="APP:CUSTOM_ERROR">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="ee4a4edf-98db-4fb8-99b6-453bca60a4cd" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- []]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config" doc:id="36f8c953-6cda-4c1e-ab84-df7fd6f1b859" name="post:\allocateSeat:application\json:proc-e-counselling-config"/>
+		</munit:execution>
+	</munit:test>
+	<munit:test name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-preference1-noCategorySeatTesting" doc:id="36d5e843-b99a-4595-a145-2d0c8acfd8d3" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getPerformanceDetails" doc:id="685cbfeb-2ecc-4a73-beba-da888a28a30f" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_statusPending-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeCutOff" doc:id="7fc7e1b9-8018-4d5b-a401-097803ec63c6" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeSeat-post" doc:id="72e8de19-6072-4952-acc3-22bbc87fa3e2" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeSeat-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7ff47554-139f-428a-ac57-6ba3d3e6b450" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeSeat" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-post-noSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when updateCollegeSeat" doc:id="356829a1-688f-459b-bab6-55084b0e905e" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeSeat-put-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a10c059e-3ed1-4853-86b9-5beb6e9507b2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- {msg: "success"}]' mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[output application/json --- {statusCode: 200}]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when updateStudentPerformanceDetails" doc:id="d62ce283-d2c6-45ee-969b-fab58dc5a5d5" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-put-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="16db1699-24ad-4c0c-a12d-fb02f49c4e9f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- {msg: "success"}]' mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[output application/json --- {statusCode: 200}]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when sendingMail" doc:id="a5b3c2c6-ea9a-48e7-b6d2-e283611cf2cf" processor="email:send" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="9e8e21d0-7f2f-4d91-8527-53496148cc74" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Email_SMTP" attributeName="config-ref" />
+					<munit-tools:with-attribute whereValue="confirmation-mail sending" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- {msg: "success"}]' mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[output application/json --- {statusCode: 200}]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set initialPayload" doc:id="f2fb93c4-7c29-439a-96ed-f48dd21811d2" >
+				<munit:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:variables >
+					<munit:variable key="initialPayload" value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config" doc:id="fc892652-7c77-4b20-b071-d3ef63f442b0" name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="b0d90f80-dbfd-48a2-912b-c4077981a058" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-preference1-categoryGeneral-Testing" doc:id="8a1d5ef4-f0a5-4a2c-bf78-6c18f2ede08b" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getPerformanceDetails" doc:id="5e5d3a75-81ef-4543-9707-025aada7f7d6" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_statusPending-categoryGeneral-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeCutOff" doc:id="6f409381-8511-45ec-bf66-ab69d5e2372d" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeSeat-post" doc:id="a02ba41a-4945-4cf5-a6cb-549b320a6848" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeSeat-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7ff47554-139f-428a-ac57-6ba3d3e6b450" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeSeat" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-post-noSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when updateCollegeSeat" doc:id="d37c2fc5-6e22-45a3-ba8f-d92a95592f9d" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeSeat-put-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a10c059e-3ed1-4853-86b9-5beb6e9507b2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- {msg: "success"}]' mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[output application/json --- {statusCode: 200}]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when updateStudentPerformanceDetails" doc:id="617154d5-606c-4d70-a805-9cfc405fad10" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-put-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="16db1699-24ad-4c0c-a12d-fb02f49c4e9f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- {msg: "success"}]' mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[output application/json --- {statusCode: 200}]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when sendingMail" doc:id="9158d829-e49d-4eb6-925c-a88c23ca8dc3" processor="email:send" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="9e8e21d0-7f2f-4d91-8527-53496148cc74" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="Email_SMTP" attributeName="config-ref" />
+					<munit-tools:with-attribute whereValue="confirmation-mail sending" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/json --- {msg: "success"}]' mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[output application/json --- {statusCode: 200}]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set initialPayload" doc:id="0f553b85-301c-440f-b777-870393b33892" >
+				<munit:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:variables >
+					<munit:variable key="initialPayload" value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config" doc:id="8af03977-0457-468e-b717-ca150f03215e" name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert expression" doc:id="5e80f4e6-50ce-4ced-8ad2-159dd962876b" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-preference1-2-3-categoryGeneral-noSeatResponse-Testing" doc:id="fe6f8ed0-6657-4238-9bf7-d6cf586159e6" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getPerformanceDetails" doc:id="3d5419fd-d69b-4637-9012-be561cbf79cd" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_statusPending-categoryGeneral-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeCutOff" doc:id="9d64c985-3a1c-4fa3-8132-442887b15a3d" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeSeatPreference1-post" doc:id="d0bd6b3d-f55c-4f4a-9cc3-ad6a9a213dd2" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeSeat-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7ff47554-139f-428a-ac57-6ba3d3e6b450" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeSeat" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-post-zeroSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock FlowReference getCollegeSeat preference2" doc:id="d912ac82-8d96-4499-93a8-898bb6418d5e" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getCollegeSeat-post-Sub_Flow" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="0bc3ace7-45e9-48bf-8d38-58ecd47258c3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-preference2-zeroSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock FlowReference getCollegeSeat preference3" doc:id="56666121-ef58-4458-b377-bb3f3a582597" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getCollegeSeat-post-Sub_Flow" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="316e2c3b-f109-42f7-948a-ee6b35c87d00" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-preference3-zeroSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set initialPayload" doc:id="1a61d478-b373-4666-8d21-4e35eca3f2c1" >
+				<munit:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:variables >
+					<munit:variable key="initialPayload" value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config" doc:id="45e7b6b5-c23b-49f1-9270-e52048197496" name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert Payload Response" doc:id="650cc87a-5f0e-4c0b-ba90-c7c4bef85a62" >
+				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
+ ---
+payload must equalTo({
+	msg: "no seat is available in the preferred colleges,please apply for other colleges."
+})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-cutOffCriteriaNotSatisfied-test" doc:id="0a82b661-4071-4fca-a780-f63b6289494d" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getPerformanceDetails" doc:id="1b55bd24-9b1a-431b-9569-c5bc80bf9af3" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_statusPending-cutOffCriteriaNotSatisfied-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeCutOff" doc:id="b31f9ad0-d4d9-4ca9-9d2e-31bf3e18490c" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set initialPayload" doc:id="d5155021-3d54-42a0-903c-d761b40e1ddf" >
+				<munit:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:variables >
+					<munit:variable key="initialPayload" value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config" doc:id="6f5a4da7-640a-481d-aafa-826a81617dc6" name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload Response" doc:id="604be57f-544e-4822-a4a7-cb2be600c12f" >
+				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
+ ---
+payload must equalTo({
+	"msg":"student does not fullfill the cutoff criteria of the preferred colleges"
+})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="route-test-suite-post:\allocateSeat:application\json:proc-e-counselling-preference1-2-3-category-noSeat-Testing" doc:id="0a45900f-5bf9-4e49-8681-55b81b629106" description="Test" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getPerformanceDetails" doc:id="3e9e830b-da7f-4606-8e28-a855bf51f078" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getPerformanceDetails-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7acdc9e3-e666-43d5-85c8-0b8c95eb2b4d" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getPerformanceDetails" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getPerformanceDetails_statusPending-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeCutOff" doc:id="25734f32-0e9a-4a1f-8d49-fe42f89622b8" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeCutoff-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7b4df24-e6ea-45b5-b8e9-d454eb0d5904" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeCutoff" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeCutOff-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when getCollegeSeatPreference1-post" doc:id="c3e1ee1d-0a72-4547-8fc0-92e3244fa4ad" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request-sys-e-counselling-getCollegeSeat-post-Invoke" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="7ff47554-139f-428a-ac57-6ba3d3e6b450" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/getCollegeSeat" attributeName="path" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-post-zeroSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock FlowReference getCollegeSeat preference2" doc:id="2f28cd0e-8d50-466e-945e-944173be0cc6" processor="flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getCollegeSeat-post-Sub_Flow" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="0bc3ace7-45e9-48bf-8d38-58ecd47258c3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-preference2-zeroSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock FlowReference getCollegeSeat preference3" doc:id="115ce807-a28d-4bae-bebd-72ef981bb72d" processor="flow-ref" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getCollegeSeat-post-Sub_Flow" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="316e2c3b-f109-42f7-948a-ee6b35c87d00" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\getCollegeSeat-preference3-zeroSeat-mockResponse.dwl')]" mediaType="application/json" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set initialPayload" doc:id="c8249d3f-24ad-48fc-b6cf-64817cd9524e" >
+				<munit:payload value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:variables >
+					<munit:variable key="initialPayload" value="#[output application/json  --- readUrl('classpath://procecounsellingFlowTest\allocateSeat-initialPayload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to post:\allocateSeat:application\json:proc-e-counselling-config" doc:id="ea5342c0-6451-4768-bd67-b79505a52b8a" name="post:\allocateSeat:application\json:proc-e-counselling-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert Payload Response" doc:id="df578d57-4525-466f-a733-e82f90d983cf" >
+				<munit-tools:that ><![CDATA[#[import * from dw::test::Asserts 
+ ---
+payload must equalTo({
+	msg: "no seat is available in the preferred colleges,please apply for other colleges."
+})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+</mule>
